@@ -1,4 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+
+class CustomUser(AbstractUser):
+    email = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.username
 
 
 class Author(models.Model):
@@ -7,23 +15,38 @@ class Author(models.Model):
     author_description = models.TextField(max_length=1000)
     author_photo = models.ImageField(blank=True, null=True, upload_to="authors/")
 
+    def __str__(self):
+        return self.author_name
+
 
 class Category(models.Model):
     category_name = models.CharField(max_length=40)
+
+    def __str__(self):
+        return self.category_name
 
 
 class Subcategory(models.Model):
     subcategory_name = models.CharField(max_length=40)
 
+    def __str__(self):
+        return self.subcategory_name
+
 
 class Type(models.Model):
     type_name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.type_name
 
 
 class Country(models.Model):
     country_name = models.CharField(max_length=50)
     language_code = models.CharField(max_length=10)
     language_name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.country_name
 
 
 class Course(models.Model):
@@ -37,3 +60,6 @@ class Course(models.Model):
     course_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     course_type = models.ForeignKey(Type, on_delete=models.CASCADE)
     course_language = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.course_name
