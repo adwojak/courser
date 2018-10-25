@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    path('admin/', admin.site.urls),
-    path('users/', include('Courser.urls')),
-    path('users/', include('django.contrib.auth.urls'))
+    path('', include('Courser.urls')),
+    path('', include('django.contrib.auth.urls')),
+    path('admin/', admin.site.urls)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

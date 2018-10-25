@@ -12,7 +12,7 @@ class SignUp(generic.CreateView):
 
 class EditProfile(LoginRequiredMixin, generic.UpdateView):
     form_class = CustomUserChangeForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('home')
     template_name = 'edit.html'
 
     def get_object(self, queryset=None):
