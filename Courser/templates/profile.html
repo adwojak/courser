@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My profile{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <h3 class="text-center page-header">
+                    My profile
+            </h3>
+            <div class="col-sm-2">
+                {% if user_object.user_photo.is_exists %}
+                    <img src="{{ user_object.user_photo.url }}" class="img-responsive">
+                {% else %}
+                    <img src="{% static 'Courser/images/default.png' %}" class="img-responsive" alt="No image.">
+                {% endif %}
+            </div>
+            <div class="col-sm-10">
+                <p>First name: {{ user_object.first_name }}</p>
+                <p>Last name: {{ user_object.last_name }}</p>
+                <p>E-mail: {{ user_object.email }}</p>
+                <p>Address: {{ user_object.address }}</p>
+                <p>City: {{ user_object.city }} </p>
+                <p>Zip-code: {{ user_object.city }}</p>
+            </div>
+        </div>
+    </div>
+
+<br><br>
+    <div class="container text-right">
+        <a href="{% url 'edit' %}" class="btn btn-primary">Edit profile</a>
+        <a href="{% url 'password_change' %}" class="btn btn-primary">Change password</a>
+    </div>
+{% endblock %}

@@ -27,7 +27,7 @@
             <a href="{% url 'login' %}" class="btn btn-success">Login</a>
             {% endif %}
             {% if user.is_authenticated == True %}
-            <a href="{% url 'edit' %}" class="btn btn-primary">Edit profile</a>
+            <a href="{% url 'profile' %}" class="btn btn-primary">My profile</a>
             <a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
             {% endif %}
 
