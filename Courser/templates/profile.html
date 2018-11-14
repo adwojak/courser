@@ -24,12 +24,13 @@
                 <p>City: {{ user_object.city }} </p>
                 <p>Zip-code: {{ user_object.city }}</p>
             </div>
+                    <a href="{% url 'edit' %}" class="btn btn-primary">Edit profile</a>
+        <a href="{% url 'password_change' %}" class="btn btn-primary">Change password</a>
+
         </div>
     </div>
 
 <br><br>
     <div class="container text-right">
-        <a href="{% url 'edit' %}" class="btn btn-primary">Edit profile</a>
-        <a href="{% url 'password_change' %}" class="btn btn-primary">Change password</a>
     </div>
 {% endblock %}

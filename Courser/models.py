@@ -34,39 +34,30 @@ class Category(models.Model):
 
 
 class Subcategory(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False, null=False, default=0)
     subcategory_name = models.CharField(max_length=40)
 
     def __str__(self):
         return self.subcategory_name
 
 
-class Type(models.Model):
-    type_name = models.CharField(max_length=20)
+class CourseLevel(models.Model):
+    level_name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.type_name
-
-
-class Country(models.Model):
-    country_name = models.CharField(max_length=50)
-    language_code = models.CharField(max_length=10)
-    language_name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.country_name
+        return self.level_name
 
 
 class Course(models.Model):
     course_name = models.CharField(max_length=100)
     course_description = models.TextField(max_length=1000)
     course_price = models.IntegerField()
-    course_length = models.IntegerField(null=True)
-    course_pages = models.IntegerField(null=True)
+    course_length = models.IntegerField(blank=True, null=True)
     course_photo = models.ImageField(blank=True, null=True, upload_to="courses/")
     course_author = models.ForeignKey(Author, on_delete=models.CASCADE)
     course_category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    course_type = models.ForeignKey(Type, on_delete=models.CASCADE)
-    course_language = models.ForeignKey(Country, on_delete=models.CASCADE)
+    course_subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, default=0)
+    course_level = models.ForeignKey(CourseLevel, on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return self.course_name

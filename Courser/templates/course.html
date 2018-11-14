@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.course_name }}{% endblock %}
+
+{% block content %}
+
+        <div class="col-md-12 text-light bg-dark mt-4">
+            <div class="container">
+                <h2>{{ course.course_name }}</h2>
+                <h4>{{ course.course_category }} - {{ course.course_subcategory }}</h4>
+                <h5 class="small">Level: {{ course.course_level }} <i class='far fa-dot-circle'></i> Length: {{ course.course_length }} </h5>
+                <h5 class="small">Made by: {{ course.course_author }}</h5>
+            </div>
+        </div>
+
+{% endblock %}

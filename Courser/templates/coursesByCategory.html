@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Category{% endblock %}
+
+{% block content %}
+    <div class="row col-md-10 mx-auto mt-4">
+        <p>
+            Courses in category {{ coursesByCategory.first.course_category }}: {{ coursesCount }}
+        </p>
+    </div>
+    {% if coursesByCategory %}
+        {% for course in coursesByCategory %}
+                <div class="card flex-row flex-wrap w-75 my-4 border-0 mx-auto cardDiv" onclick="location.href='{% url 'course' course.id %}';">
+                    <div class="card-header border-0 col-md-2">
+                            <img src="{{ course.course_photo.url }}" class="w-100">
+                        <!--{% if course.course_photo.is_exists %}-->
+                        <!--{% else %}-->
+                            <!--<img src="{% static 'Courser/images/default.png' %}" class="w-100" alt="No image.">-->
+                        <!--{% endif %}-->
+                    </div>
+                    <div class="card-block px-2 col-md-9">
+                        <h4 class="card-title">{{ course.course_name }}</h4>
+                        <h6 class="small">{{ course.course_length }} minutes of video
+                            <i class='far fa-dot-circle'></i>
+                            {{ course.course_level }}
+                        </h6>
+                        <p class="card-text">{{ course.course_description }}</p>
+                    </div>
+                    <div class="card-block px-2 ml-auto col-md-1">
+                        <h4 class="card-title text-right">{{ course.course_price }} zł</h4>
+                    </div>
+                </div>
+        {% endfor %}
+    {% else %}
+        <p>No courses in that category.</p>
+    {% endif %}
+{% endblock %}

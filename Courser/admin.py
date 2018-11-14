@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser
+from .forms import (
+    CustomUserCreationForm,
+    CustomUserChangeForm
+)
+from . import models
 
 
 class CustomUserAdmin(UserAdmin):
@@ -13,8 +16,13 @@ class CustomUserAdmin(UserAdmin):
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     form = CustomUserChangeForm
-    model = CustomUser
+    model = models.CustomUser
     list_display = ['username', 'email']
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(models.CustomUser, CustomUserAdmin)
+admin.site.register(models.Author)
+admin.site.register(models.Category)
+admin.site.register(models.Subcategory)
+admin.site.register(models.Course)
+admin.site.register(models.CourseLevel)
