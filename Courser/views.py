@@ -16,7 +16,10 @@ from .forms import (
     CustomPasswordResetForm,
     CustomSetPasswordForm
 )
-from .models import Course
+from .models import (
+    Course,
+    Category
+)
 
 
 class Login(LoginView, FormView):
@@ -82,9 +85,24 @@ class SearchListView(generic.ListView):
         query = Course.objects.filter(course_category__category_name__icontains=r)
         context['coursesByCategory'] = query
         context['coursesCount'] = query.count()
+        context['topic'] = r
         return context
 
 
 class CourseDetailView(generic.DetailView):
     model = Course
     template_name = 'course.html'
+
+
+class HomeView(generic.TemplateView):
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query_courses = Course.objects.all()[:6]
+        context['lastCourses'] = query_courses
+        query_courses_in_category = Course.objects.all()[:6]
+        context['lastCoursesInCategory'] = query_courses_in_category
+        query_categories = Category.objects.all()[:4]
+        context['lastCategories'] = query_categories
+        return context

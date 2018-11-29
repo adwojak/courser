@@ -4,13 +4,28 @@
 
 {% block content %}
 
-        <div class="col-md-12 text-light bg-dark mt-4">
-            <div class="container">
-                <h2>{{ course.course_name }}</h2>
-                <h4>{{ course.course_category }} - {{ course.course_subcategory }}</h4>
-                <h5 class="small">Level: {{ course.course_level }} <i class='far fa-dot-circle'></i> Length: {{ course.course_length }} </h5>
-                <h5 class="small">Made by: {{ course.course_author }}</h5>
+        <div class="col-md-12 text-light bg-dark mt-4 py-4">
+            <div class="col-md-8 ml-0 bg-info">
+                <div class="col-md-8 mx-auto">
+                    <h1 class="display-4"><strong>{{ course.course_name }}</strong></h1>
+                    <h4>{{ course.course_category }} - {{ course.course_subcategory }}</h4>
+                    <h5 class="small">Level: {{ course.course_level }} <i class='far fa-dot-circle'></i> Length: {{ course.course_length }} minutes</h5>
+                    <h5 class="small">Made by: {{ course.course_author }}</h5>
+                </div>
             </div>
         </div>
+        <div class="col-md-12 mt-4 py-4">
+            <div class="col-md-8 ml-0">
+                <div class="col-md-10 float-right">
+                    <div class="card border-0">
+                        <div class="card-title"><h2>Description:</h2></div>
+                        <div class="card-body">
+                            <p class="card-text">{{ course.course_description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'checkout' %}" class="btn btn-success">Kup teraz!</a>
 
 {% endblock %}

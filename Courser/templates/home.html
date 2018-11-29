@@ -2,6 +2,50 @@
 
 {% block title %}Home{% endblock %}
 
-{% block menu %}
+{% block content %}
+
+<div class="mx-auto mt-4 mb-2 col-md-11"><p class="ml-2">Newest courses:</p></div>
+<div class="card-deck mx-auto col-md-11">
+    {% for course in lastCourses %}
+    <div class="card mx-2">
+        <div class="card-img-top center-cropped">
+            <img src="{{ course.course_photo.url }}" alt="No image providen.">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ course.course_name }}</h5>
+            <p class="card-text">{{ course.course_author }}</p>
+            <p class="card-text">{{ course.course_price }} zł</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="mx-auto mt-4 mb-2 col-md-11"><p class="ml-2">Category programming:</p></div>
+<div class="card-deck mx-auto col-md-11">
+    {% for course in lastCoursesInCategory %}
+    <div class="card mx-2">
+        <div class="card-img-top center-cropped">
+            <img src="{{ course.course_photo.url }}" alt="No image providen.">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ course.course_name }}</h5>
+            <p class="card-text">{{ course.course_author }}</p>
+            <p class="card-text">{{ course.course_price }} zł</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="mx-auto mt-4 col-md-11"><p class="ml-2">Popular categories:</p></div>
+<div class="card-deck mx-auto col-md-11 mb-4">
+    {% for category in lastCategories %}
+    <div class="card mx-2 cardDiv" onclick="location.href='{% url 'coursesByCategory' category.id %}';">
+        <div class="card-body">
+            <h5 class="card-title"><i class="far fa-dot-circle"></i>{{ category.category_name }}</h5>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<br><br><br>
 
 {% endblock %}
