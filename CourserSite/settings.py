@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Courser',
+    'Courser.apps.CourserConfig',
     'django.contrib.admin'
 ]
 
@@ -35,6 +35,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Courser.middleware.OneSessionPerUserMiddleware'
 ]
 
 ROOT_URLCONF = 'CourserSite.urls'
