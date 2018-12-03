@@ -23,6 +23,10 @@ body {
     cursor: pointer;
 }
 
+.clickable:hover {
+    cursor: pointer;
+}
+
 div.center-cropped {
   height: 100px;
   overflow:hidden;
@@ -42,4 +46,8 @@ div.center-cropped img {
     font-weight: 300;
     src: local('Open Sans Light'), local('OpenSans-Light'), url(https://fonts.gstatic.com/s/opensans/v15/mem5YaGs126MiZpBA-UN_r8OX-hpKKSTj5PW.woff2) format('woff2'), url(https://fonts.gstatic.com/s/opensans/v15/mem5YaGs126MiZpBA-UN_r8OXOhv.woff) format('woff');
     unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #8c8c8c;
 }

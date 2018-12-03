@@ -18,7 +18,8 @@ from .forms import (
 )
 from .models import (
     Course,
-    Category
+    Category,
+    Cart
 )
 
 
@@ -106,3 +107,53 @@ class HomeView(generic.TemplateView):
         query_categories = Category.objects.all()[:4]
         context['lastCategories'] = query_categories
         return context
+
+
+class AddToCartView(generic.TemplateView):
+    template_name = 'addToCart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        r = self.request.GET.get('courseId', '')
+        query = Course.objects.filter(id=r)[0]
+        self.add_to_cart(query)
+        context['course'] = query
+        return context
+
+    def add_to_cart(self, course):
+        # TODO try / except
+        course_id = course.id
+        course_name = course.course_name
+        course_price = course.course_price
+        cart = Cart(course_id=course_id, course_name=course_name, course_price=course_price)
+        cart.save()
+        return True
+
+
+class MyCart(generic.ListView):
+    model = Cart
+    template_name = 'myCart.html'
+    paginate_by = 20
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_price'] = self.get_total_price(self.model)
+        return context
+
+    def get_total_price(self, model):
+        total_price = 0
+        for course in model.objects.all():
+            total_price += course.course_price
+        return total_price
+
+
+class Payment(generic.TemplateView):
+    template_name = 'payment.html'
+
+    def get_context_data(self, **kwargs):
+        self.delete_objects()
+        return None
+
+    def delete_objects(self):
+        ss = Cart.objects.all()
+        ss.delete()

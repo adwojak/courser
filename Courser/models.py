@@ -78,3 +78,9 @@ class Course(Model):
 
     def __str__(self):
         return self.course_name
+
+
+class Cart(Model):
+    course_id = IntegerField(default=0, null=False)
+    course_name = CharField(max_length=100)
+    course_price = IntegerField()

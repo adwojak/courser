@@ -26,6 +26,12 @@
                 </div>
             </div>
         </div>
-        <a href="{% url 'checkout' %}" class="btn btn-success">Kup teraz!</a>
+
+      <form action="{% url 'addToCart' %}" id="addToCartForm">
+        <input type="hidden" name="courseId" value="{{ course.id }}">
+        <div class="input-group-append">
+            <button class="btn btn-success" type="submit" form="addToCartForm">Kup teraz!</button>
+        </div>
+      </form>
 
 {% endblock %}
