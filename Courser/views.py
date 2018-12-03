@@ -11,7 +11,7 @@ from django.views.generic import FormView
 
 from .forms import (
     CustomUserCreationForm,
-    CustomUserChangeForm,
+    CustomEditProfileForm,
     CustomAuthenticationForm,
     CustomPasswordResetForm,
     CustomSetPasswordForm
@@ -46,7 +46,7 @@ class PasswordResetConfirm(PasswordResetConfirmView):
 
 
 class EditProfile(LoginRequiredMixin, generic.UpdateView):
-    form_class = CustomUserChangeForm
+    form_class = CustomEditProfileForm
     success_url = reverse_lazy('profile')
     template_name = 'edit.html'
 

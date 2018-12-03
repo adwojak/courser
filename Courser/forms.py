@@ -13,10 +13,12 @@ from django.forms import (
     CharField,
     PasswordInput,
     EmailField,
-    EmailInput
+    EmailInput,
+    ImageField
 )
 from django.contrib.auth.password_validation import password_validators_help_text_html
 from .models import CustomUser
+from .widgets import CustomClearableFileInput
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -36,14 +38,6 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ('username', 'email')
-
-
-class CustomUserChangeForm(UserChangeForm):
-    password = ReadOnlyPasswordHashField(label="Password", widget=HiddenInput())
-
-    class Meta:
-        model = CustomUser
-        fields = ('first_name', 'last_name', 'address', 'city', 'zip_code', 'phone_number', 'user_photo')
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -71,3 +65,39 @@ class CustomSetPasswordForm(SetPasswordForm):
         strip=False,
         widget=PasswordInput(attrs={'class': 'form-control'}),
     )
+
+
+class CustomEditProfileForm(UserChangeForm):
+    first_name = CharField(
+        label="First name",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    last_name = CharField(
+        label="Last name",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    address = CharField(
+        label="Address",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    city = CharField(
+        label="City",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    zip_code = CharField(
+        label="Zip-code",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    phone_number = CharField(
+        label="Phone number",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    user_photo = ImageField(
+        label="Choose photo",
+        widget=CustomClearableFileInput() # TODO Button w edit
+    )
+    password = ReadOnlyPasswordHashField(label="", widget=HiddenInput())
+
+    class Meta:
+        model = CustomUser
+        fields = ('first_name', 'last_name', 'address', 'city', 'zip_code', 'phone_number', 'user_photo')

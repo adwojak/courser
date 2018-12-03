@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .forms import (
     CustomUserCreationForm,
-    CustomUserChangeForm
+    CustomEditProfileForm
 )
 from . import models
 
@@ -15,7 +15,7 @@ class CustomUserAdmin(UserAdmin):
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
-    form = CustomUserChangeForm
+    form = CustomEditProfileForm
     model = models.CustomUser
     list_display = ['username', 'email']
 
