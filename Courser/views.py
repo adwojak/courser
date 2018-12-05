@@ -2,7 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LoginView,
     PasswordResetView,
-    PasswordResetConfirmView
+    PasswordResetConfirmView,
+    PasswordChangeView
 )
 from django.shortcuts import resolve_url
 from django.urls import reverse_lazy
@@ -12,9 +13,11 @@ from django.views.generic import FormView
 from .forms import (
     CustomUserCreationForm,
     CustomEditProfileForm,
+    CustomEditPaymentForm,
     CustomAuthenticationForm,
     CustomPasswordResetForm,
-    CustomSetPasswordForm
+    CustomSetPasswordForm,
+    CustomPasswordChangeForm
 )
 from .models import (
     Course,
@@ -45,13 +48,22 @@ class PasswordResetConfirm(PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
 
 
-class EditProfile(LoginRequiredMixin, generic.UpdateView):
+class PasswordChange(PasswordChangeView):
+    form_class = CustomPasswordChangeForm
+
+
+class EditBasicInformation(LoginRequiredMixin, generic.UpdateView):
     form_class = CustomEditProfileForm
     success_url = reverse_lazy('profile')
-    template_name = 'edit.html'
+    template_name = 'editBasicInfo.html'
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class EditPaymentInformation(EditBasicInformation):
+    form_class = CustomEditPaymentForm
+    template_name = 'editPaymentInfo.html'
 
 
 class MyProfile(LoginRequiredMixin, generic.DetailView):
@@ -151,8 +163,12 @@ class Payment(generic.TemplateView):
     template_name = 'payment.html'
 
     def get_context_data(self, **kwargs):
-        self.delete_objects()
-        return None
+        context = super().get_context_data(**kwargs)
+        payment_fulfilled = self.request.user.is_payment_fulfilled
+        context['user_payment_info'] = payment_fulfilled
+        if payment_fulfilled:
+            self.delete_objects()
+        return context
 
     def delete_objects(self):
         ss = Cart.objects.all()

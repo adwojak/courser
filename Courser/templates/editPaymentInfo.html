@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Password change{% endblock %}
+{% block title %}Edit payment informations{% endblock %}
 
 {% block content %}
 <div class="w-50 mx-auto">
   <div class="row mb-4">
     <h3 class="page-header mx-auto">
-      Password change
+      Edit payment informations
     </h3>
   </div>
   <div class="container">
-    <form method="post" id="passwordChangeForm" class="form-horizontal">
+    <form method="post" enctype='multipart/form-data' id="editForm" class="form-horizontal">
       {% csrf_token %}
       {{ form.non_field_errors }}
       {% for field in form %}
@@ -31,7 +31,7 @@
     </form>
   </div>
   <div class="row float-right">
-    <button type="submit" class="btn btn-success" form="passwordChangeForm">Change password</button>
+    <button type="submit" class="btn btn-success" form="editForm">Save profile</button>
   </div>
 </div>
 {% endblock %}

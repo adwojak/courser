@@ -5,7 +5,8 @@ from django.contrib.auth.forms import (
     UsernameField,
     AuthenticationForm,
     PasswordResetForm,
-    SetPasswordForm
+    SetPasswordForm,
+    PasswordChangeForm
 )
 from django.forms import (
     HiddenInput,
@@ -14,7 +15,8 @@ from django.forms import (
     PasswordInput,
     EmailField,
     EmailInput,
-    ImageField
+    ImageField,
+    IntegerField
 )
 from django.contrib.auth.password_validation import password_validators_help_text_html
 from .models import CustomUser
@@ -67,6 +69,24 @@ class CustomSetPasswordForm(SetPasswordForm):
     )
 
 
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = CharField(
+        label="Old password",
+        strip=False,
+        widget=PasswordInput(attrs={'autofocus': True, 'class': 'form-control'}),
+    )
+    new_password1 = CharField(
+        label="New password",
+        strip=False,
+        widget=PasswordInput(attrs={'class': 'form-control'}),
+    )
+    new_password2 = CharField(
+        label="Repeat new password",
+        strip=False,
+        widget=PasswordInput(attrs={'class': 'form-control'}),
+    )
+
+
 class CustomEditProfileForm(UserChangeForm):
     first_name = CharField(
         label="First name",
@@ -101,3 +121,23 @@ class CustomEditProfileForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ('first_name', 'last_name', 'address', 'city', 'zip_code', 'phone_number', 'user_photo')
+
+
+class CustomEditPaymentForm(UserChangeForm):
+    credit_card_number = IntegerField(
+        label="Credit card number",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    credit_card_expire_date = CharField(
+        label="Credit card expire date",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    credit_card_cvv = IntegerField(
+        label="Credit card cvv number",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    password = ReadOnlyPasswordHashField(label="", widget=HiddenInput())
+
+    class Meta:
+        model = CustomUser
+        fields = ('credit_card_number', 'credit_card_expire_date', 'credit_card_cvv')

@@ -3,7 +3,10 @@
 {% block title %}Payment{% endblock %}
 
 {% block content %}
-
-    <p>Payment successful</p>
+    {% if user_payment_info %}
+        <p>Payment successful</p>
+    {% else %}
+<p>Your profile is not fully fulfilled. You can go <a href="{% url 'edit' %}">HERE</a> to fill in Your informations.</p>
+    {% endif %}
 
 {% endblock %}

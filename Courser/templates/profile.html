@@ -6,34 +6,37 @@
 
 
     <div class="w-75 mx-auto">
-        <div class="row mb-4">
+        <div class="row mb-4 w-100">
             <h3 class="page-header mx-auto">
                     My profile
             </h3>
         </div>
-        <div class="row">
-            <div class="col-3">
-                {% if user_object.user_photo.url %}
-                    <img src="{{ user_object.user_photo.url }}" class="img-fluid">
-                {% else %}
-                    <img src="{% static 'Courser/images/default.png' %}" class="img-fluid" alt="No image.">
-                {% endif %}
+        <div class="row w-100">
+            <div class="col-sm-3">
+                <a href="{% url 'edit' %}">Edit basic information</a><br>
+                <a href="{% url 'paymentInfo' %}">Edit payment information</a><br>
+                <a href="{% url 'password_change' %}">Change password</a>
             </div>
-            <div class="col-8">
-                <p>First name: {{ user_object.first_name }}</p>
-                <p>Last name: {{ user_object.last_name }}</p>
-                <p>E-mail: {{ user_object.email }}</p>
-                <p>Address: {{ user_object.address }}</p>
-                <p>City: {{ user_object.city }} </p>
-                <p>Zip-code: {{ user_object.city }}</p>
+            <div class="col-sm-9">
+                <div class="row">
+                    <div class="col-3">
+                        <img src="{% static 'Courser/images/default.png' %}" class="img-fluid" alt="No image.">
+                    </div>
+                    <div class="col-9">
+                        <p>First name: {{ user_object.first_name }}</p>
+                        <p>Last name: {{ user_object.last_name }}</p>
+                        <p>E-mail: {{ user_object.email }}</p>
+                        <p>Address: {{ user_object.address }}</p>
+                        <p>City: {{ user_object.city }} </p>
+                        <p>Zip-code: {{ user_object.city }}</p>
+                        <p>Card number: {{ user_object.credit_card_number }}</p>
+                        <p>Card number exp date: {{ user_object.credit_card_expire_date }}</p>
+                        <p>Card number cvv: {{ user_object.credit_card_cvv }}</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row float-right">
-            <a href="{% url 'edit' %}" class="btn btn-primary mr-4">Edit profile</a>
-            <a href="{% url 'password_change' %}" class="btn btn-primary">Change password</a>
         </div>
     </div>
-
     <!--<div class="container">-->
         <!--<div class="row">-->
             <!--<h3 class="text-center page-header">-->

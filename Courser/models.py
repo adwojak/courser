@@ -6,6 +6,7 @@ from django.db.models import (
     TextField,
     ForeignKey,
     IntegerField,
+    BooleanField,
     CASCADE,
     Model
 )
@@ -20,6 +21,10 @@ class CustomUser(AbstractUser):
     zip_code = CharField(max_length=6, blank=True) # TODO poprawic
     phone_number = CharField(max_length=9, blank=True) # TODO poprawic
     user_photo = ImageField(blank=True, null=True, upload_to="users/")
+    credit_card_number = IntegerField(blank=True, null=True)
+    credit_card_expire_date = CharField(max_length=4, blank=True, null=True)
+    credit_card_cvv = IntegerField(blank=True, null=True)
+    is_payment_fulfilled = BooleanField(default=False)
 
     def __str__(self):
         return self.username
