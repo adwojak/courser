@@ -30,14 +30,6 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-class LoggedInUser(Model):
-    user = OneToOneField(CustomUser, related_name='logged_in_user', on_delete=CASCADE)
-    session_key = CharField(max_length=32, null=True, blank=True)
-
-    def __str__(self):
-        return self.user.first_name
-
-
 class Author(Model):
     author_name = CharField(max_length=15)
     author_surname = CharField(max_length=25)

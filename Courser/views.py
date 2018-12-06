@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import (
     LoginView,
     PasswordResetView,
@@ -9,6 +10,8 @@ from django.shortcuts import resolve_url
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import FormView
+from django.utils.decorators import method_decorator
+from .decorators import anonymous_required
 
 from .forms import (
     CustomUserCreationForm,
@@ -26,6 +29,7 @@ from .models import (
 )
 
 
+@method_decorator(anonymous_required, name='dispatch')
 class Login(LoginView, FormView):
     form_class = CustomAuthenticationForm
     template_name = 'registration/login.html'
@@ -34,24 +38,29 @@ class Login(LoginView, FormView):
         return resolve_url('home') # TODO zmienic
 
 
+@method_decorator(anonymous_required, name='dispatch')
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
     template_name = 'registration/signup.html'
     success_url = reverse_lazy('login')
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class PasswordReset(PasswordResetView):
     form_class = CustomPasswordResetForm
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class PasswordResetConfirm(PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class PasswordChange(PasswordChangeView):
     form_class = CustomPasswordChangeForm
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class EditBasicInformation(LoginRequiredMixin, generic.UpdateView):
     form_class = CustomEditProfileForm
     success_url = reverse_lazy('profile')
@@ -61,11 +70,13 @@ class EditBasicInformation(LoginRequiredMixin, generic.UpdateView):
         return self.request.user
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class EditPaymentInformation(EditBasicInformation):
     form_class = CustomEditPaymentForm
     template_name = 'editPaymentInfo.html'
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class MyProfile(LoginRequiredMixin, generic.DetailView):
     template_name = 'profile.html'
     context_object_name = 'user_object'
@@ -121,6 +132,7 @@ class HomeView(generic.TemplateView):
         return context
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class AddToCartView(generic.TemplateView):
     template_name = 'addToCart.html'
 
@@ -142,6 +154,7 @@ class AddToCartView(generic.TemplateView):
         return True
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class MyCart(generic.ListView):
     model = Cart
     template_name = 'myCart.html'
@@ -159,6 +172,7 @@ class MyCart(generic.ListView):
         return total_price
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class Payment(generic.TemplateView):
     template_name = 'payment.html'
 
