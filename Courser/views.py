@@ -2,9 +2,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import (
     LoginView,
+    LogoutView,
     PasswordResetView,
     PasswordResetConfirmView,
-    PasswordChangeView
+    PasswordChangeView,
+    PasswordChangeDoneView,
+    PasswordResetCompleteView,
+    PasswordResetDoneView
 )
 from django.shortcuts import resolve_url
 from django.urls import reverse_lazy
@@ -38,6 +42,11 @@ class Login(LoginView, FormView):
         return resolve_url('home') # TODO zmienic
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Logout(LogoutView):
+    pass
+
+
 @method_decorator(anonymous_required, name='dispatch')
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
@@ -51,13 +60,28 @@ class PasswordReset(PasswordResetView):
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
+class PasswordResetDone(PasswordResetDoneView):
+    pass
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class PasswordResetConfirm(PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
+class PasswordResetComplete(PasswordResetCompleteView):
+    pass
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class PasswordChange(PasswordChangeView):
     form_class = CustomPasswordChangeForm
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PasswordChangeDone(PasswordChangeDoneView):
+    pass
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
