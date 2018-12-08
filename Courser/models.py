@@ -24,10 +24,18 @@ class CustomUser(AbstractUser):
     credit_card_number = IntegerField(blank=True, null=True)
     credit_card_expire_date = CharField(max_length=4, blank=True, null=True)
     credit_card_cvv = IntegerField(blank=True, null=True)
-    is_payment_fulfilled = BooleanField(default=False)
 
     def __str__(self):
         return self.username
+
+    def is_payment_fulfilled(self):
+        return all([
+            self.email,
+            self.phone_number,
+            self.credit_card_number,
+            self.credit_card_expire_date,
+            self.credit_card_cvv
+        ])
 
 
 class Author(Model):

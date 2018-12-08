@@ -32,7 +32,6 @@ from .models import (
     Cart
 )
 
-
 @method_decorator(anonymous_required, name='dispatch')
 class Login(LoginView, FormView):
     form_class = CustomAuthenticationForm
@@ -202,7 +201,7 @@ class Payment(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        payment_fulfilled = self.request.user.is_payment_fulfilled
+        payment_fulfilled = self.request.user.is_payment_fulfilled()
         context['user_payment_info'] = payment_fulfilled
         if payment_fulfilled:
             self.delete_objects()
