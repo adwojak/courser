@@ -50,6 +50,7 @@
         <a class="btn btn-danger ml-1" href="{% url 'login' %}" role="button">Login</a>
     {% endif %}
     {% if user.is_authenticated == True %}
+        <a class="btn btn-success ml-3" href="{% url 'addCourse' %}" role="button">Add course</a>
         <a class="btn btn-success ml-3" href="{% url 'myCart' %}" role="button">My cart</a>
         <a class="btn btn-success ml-3" href="{% url 'profile' %}" role="button">My profile</a>
         <a class="btn btn-danger ml-1" href="{% url 'logout' %}" role="button">Logout</a>

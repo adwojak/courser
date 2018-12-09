@@ -22,8 +22,6 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(models.CustomUser, CustomUserAdmin)
-admin.site.register(models.Author)
 admin.site.register(models.Category)
-admin.site.register(models.Subcategory)
 admin.site.register(models.Course)
 admin.site.register(models.CourseLevel)

@@ -11,15 +11,25 @@ from django.contrib.auth.forms import (
 from django.forms import (
     HiddenInput,
     TextInput,
+    Textarea,
     CharField,
     PasswordInput,
     EmailField,
     EmailInput,
     ImageField,
-    IntegerField
+    FileField,
+    IntegerField,
+    ModelChoiceField,
+    Select,
+    ModelForm
 )
 from django.contrib.auth.password_validation import password_validators_help_text_html
-from .models import CustomUser
+from .models import (
+    CustomUser,
+    Course,
+    Category,
+    CourseLevel
+)
 from .widgets import CustomClearableFileInput
 
 
@@ -113,6 +123,7 @@ class CustomEditProfileForm(UserChangeForm):
         widget=TextInput(attrs={'class': 'form-control'})
     )
     user_photo = ImageField(
+        required=False,
         label="Choose photo",
         widget=CustomClearableFileInput() # TODO Button w edit
     )
@@ -141,3 +152,46 @@ class CustomEditPaymentForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ('credit_card_number', 'credit_card_expire_date', 'credit_card_cvv')
+
+
+class AddCourseForm(ModelForm):
+    course_name = CharField(
+        label="Course name",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    course_description = CharField(
+        label="Course description",
+        widget=Textarea(attrs={'class': 'form-control'})
+    )
+    course_price = IntegerField(
+        label="Course price",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    course_length = IntegerField(
+        label="Course length",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    course_category = ModelChoiceField(
+        label="Course category",
+        widget=Select(attrs={'class': 'form-control'}),
+        queryset=Category.objects.all()
+    )
+    course_level = ModelChoiceField(
+        label="Course level",
+        widget=Select(attrs={'class': 'form-control'}),
+        queryset=CourseLevel.objects.all()
+    )
+    course_photo = ImageField(
+        required=False,
+        label="Choose photo",
+        widget=CustomClearableFileInput()  # TODO Button w edit
+    )
+    course_video = FileField(
+        required=False,
+        label="Choose video",
+        widget=CustomClearableFileInput()  # TODO Button w edit
+    )
+
+    class Meta:
+        model = Course
+        fields = ('course_name', 'course_description', 'course_price', 'course_length', 'course_category', 'course_level')

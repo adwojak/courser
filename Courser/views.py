@@ -17,6 +17,7 @@ from django.views.generic import FormView
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from .decorators import anonymous_required
+from django.http import HttpResponseRedirect
 
 from .forms import (
     CustomUserCreationForm,
@@ -25,7 +26,8 @@ from .forms import (
     CustomAuthenticationForm,
     CustomPasswordResetForm,
     CustomSetPasswordForm,
-    CustomPasswordChangeForm
+    CustomPasswordChangeForm,
+    AddCourseForm
 )
 from .models import (
     Course,
@@ -130,11 +132,11 @@ class SearchListView(generic.ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        r = self.request.GET.get('searchInput', '')
-        query = Course.objects.filter(course_category__category_name__icontains=r)
+        search_text = self.request.GET.get('searchInput', '')
+        query = Course.objects.filter(course_name__icontains=search_text)
         context['coursesByCategory'] = query
         context['coursesCount'] = query.count()
-        context['topic'] = r
+        context['topic'] = search_text
         return context
 
 
@@ -190,6 +192,19 @@ class Payment(generic.TemplateView):
     def delete_objects(self):
         ss = Cart.objects.all()
         ss.delete()
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AddCourse(generic.CreateView):
+    form_class = AddCourseForm
+    template_name = 'addCourse.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.course_author = self.request.user
+        obj.save()
+        return HttpResponseRedirect(self.success_url)
 
 
 def delete_from_cart(request, pk):

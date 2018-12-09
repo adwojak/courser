@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Add course{% endblock %}
+
+{% block content %}
+<div class="w-50 mx-auto">
+  <div class="row float-right">
+    <button type="submit" class="btn btn-success" form="editForm">Add course</button>
+  </div>
+  <div class="row mb-4">
+    <h3 class="page-header mx-auto">
+      Add course
+    </h3>
+  </div>
+  <div class="container">
+    <form method="post" enctype='multipart/form-data' id="editForm" class="form-horizontal">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <div class="row">
+          <div class="col-sm-2 my-auto">
+            {{ field.label_tag }}
+            {% if field.help_text %}
+              <sup>{{ field.help_text }}</sup>
+            {% endif %}
+            {{ field.errors }}
+          </div>
+          <div class="col-sm-10">
+              {{ field }}
+          </div>
+        </div>
+        <br>
+      {% endfor %}
+    </form>
+  </div>
+</div>
+{% endblock %}

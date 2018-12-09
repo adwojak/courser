@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     CharField,
+    FileField,
     ImageField,
     OneToOneField,
     TextField,
@@ -38,29 +39,11 @@ class CustomUser(AbstractUser):
         ])
 
 
-class Author(Model):
-    author_name = CharField(max_length=15)
-    author_surname = CharField(max_length=25)
-    author_description = TextField(max_length=1000)
-    author_photo = ImageField(blank=True, null=True, upload_to="authors/")
-
-    def __str__(self):
-        return self.author_name
-
-
 class Category(Model):
     category_name = CharField(max_length=40)
 
     def __str__(self):
         return self.category_name
-
-
-class Subcategory(Model):
-    category = ForeignKey(Category, on_delete=CASCADE, blank=False, null=False, default=0)
-    subcategory_name = CharField(max_length=40)
-
-    def __str__(self):
-        return self.subcategory_name
 
 
 class CourseLevel(Model):
@@ -76,9 +59,9 @@ class Course(Model):
     course_price = IntegerField()
     course_length = IntegerField(blank=True, null=True)
     course_photo = ImageField(blank=True, null=True, upload_to="courses/")
-    course_author = ForeignKey(Author, on_delete=CASCADE)
+    course_video = FileField(blank=True, null=True, upload_to="videos/")
+    course_author = ForeignKey(CustomUser, on_delete=CASCADE)
     course_category = ForeignKey(Category, on_delete=CASCADE)
-    course_subcategory = ForeignKey(Subcategory, on_delete=CASCADE, default=0)
     course_level = ForeignKey(CourseLevel, on_delete=CASCADE, default=0)
 
     def __str__(self):

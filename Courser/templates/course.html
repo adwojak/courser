@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}{{ course.course_name }}{% endblock %}
 
 {% block content %}
@@ -14,10 +14,7 @@
             <div class="col-md-8 ml-0 bg-info">
                 <div class="col-md-8 mx-auto">
                     <h1 class="display-4"><strong>{{ course.course_name }}</strong></h1>
-                    <h4>{{ course.course_category }} - {{ course.course_subcategory }}</h4>
                     <h5 class="small">Level: {{ course.course_level }} <i class='far fa-dot-circle'></i> Length: {{ course.course_length }} minutes</h5>
-                    <h5 class="small">Made by: {{ course.course_author }}</h5>
-                    {{ course.id }}
                 </div>
             </div>
         </div>
@@ -34,5 +31,12 @@
             </div>
         </div>
         <a href="{% url 'addToCart' course.id %}" class="btn btn-success">Add to cart!</a>
+
+{% if course.course_video %}
+    <video width='320' height= '240' controls>
+    <source src="{{ course.course_video.url }}" type="video/mp4">
+    Your browser does not support the video tag.
+    </video>
+{% endif %}
 
 {% endblock %}
