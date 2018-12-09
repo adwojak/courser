@@ -3,7 +3,13 @@
 {% block title %}{{ course.course_name }}{% endblock %}
 
 {% block content %}
-
+    {% if messages %}
+        <ul class="w-100 text-center text-danger h6 list-unstyled">
+            {% for message in messages %}
+                <li class="{{ message.tags }}"><strong>{{ message }}</strong></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
         <div class="col-md-12 text-light bg-dark mt-4 py-4">
             <div class="col-md-8 ml-0 bg-info">
                 <div class="col-md-8 mx-auto">
@@ -11,6 +17,7 @@
                     <h4>{{ course.course_category }} - {{ course.course_subcategory }}</h4>
                     <h5 class="small">Level: {{ course.course_level }} <i class='far fa-dot-circle'></i> Length: {{ course.course_length }} minutes</h5>
                     <h5 class="small">Made by: {{ course.course_author }}</h5>
+                    {{ course.id }}
                 </div>
             </div>
         </div>
@@ -26,12 +33,6 @@
                 </div>
             </div>
         </div>
-
-      <form action="{% url 'addToCart' %}" id="addToCartForm">
-        <input type="hidden" name="courseId" value="{{ course.id }}">
-        <div class="input-group-append">
-            <button class="btn btn-success" type="submit" form="addToCartForm">Kup teraz!</button>
-        </div>
-      </form>
+        <a href="{% url 'addToCart' course.id %}" class="btn btn-success">Add to cart!</a>
 
 {% endblock %}

@@ -10,11 +10,12 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView,
     PasswordResetDoneView
 )
-from django.shortcuts import resolve_url
+from django.shortcuts import resolve_url, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import FormView
 from django.utils.decorators import method_decorator
+from django.contrib import messages
 from .decorators import anonymous_required
 
 from .forms import (
@@ -31,6 +32,7 @@ from .models import (
     Category,
     Cart
 )
+
 
 @method_decorator(anonymous_required, name='dispatch')
 class Login(LoginView, FormView):
@@ -156,28 +158,6 @@ class HomeView(generic.TemplateView):
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-class AddToCartView(generic.TemplateView):
-    template_name = 'addToCart.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        r = self.request.GET.get('courseId', '')
-        query = Course.objects.filter(id=r)[0]
-        self.add_to_cart(query)
-        context['course'] = query
-        return context
-
-    def add_to_cart(self, course):
-        # TODO try / except
-        course_id = course.id
-        course_name = course.course_name
-        course_price = course.course_price
-        cart = Cart(course_id=course_id, course_name=course_name, course_price=course_price)
-        cart.save()
-        return True
-
-
-@method_decorator(login_required(login_url='login'), name='dispatch')
 class MyCart(generic.ListView):
     model = Cart
     template_name = 'myCart.html'
@@ -210,3 +190,27 @@ class Payment(generic.TemplateView):
     def delete_objects(self):
         ss = Cart.objects.all()
         ss.delete()
+
+
+def delete_from_cart(request, pk):
+    course_to_delete = Cart.objects.filter(pk=pk)
+    if course_to_delete.exists():
+        course_to_delete[0].delete()
+        messages.success(request, "Item has been deleted from cart")
+    return redirect(reverse_lazy('myCart'))
+
+
+def add_to_cart(request, pk):
+    try:
+        course = Course.objects.filter(pk=pk)[0]
+        course_id = course.id
+        course_name = course.course_name
+        course_price = course.course_price
+        cart = Cart(course_id=course_id, course_name=course_name, course_price=course_price)
+        cart.save()
+        message_text = "Course has been added to cart"
+    except:
+        message_text = "There was an error with adding course do cart. Please try again"
+
+    messages.success(request, message_text)
+    return redirect(reverse_lazy('course', kwargs={'pk': course_id}))
