@@ -23,31 +23,14 @@
         <form method="post" id="registerForm">
           {% csrf_token %}
           {{ form.non_field_errors }}
-
-          <div class="field-wrapper">
-            {{ form.username.errors }}
-            <label>Username: </label>
-            {{ form.username }}
+          {% for field in form %}
+            <div class="field-wrapper">
+            <label>{{ field.label_tag }}</label>
+            {{ field }}
+            {{ field.errors }}
           </div>
           <br>
-          <div class="field-wrapper">
-            {{ form.email.errors }}
-            <label>E-mail: </label>
-            {{ form.email }}
-          </div>
-          <br>
-          <div class="field-wrapper">
-            {{ form.password1.errors }}
-            <label>Password: </label>
-            {{ form.password1 }}
-          </div>
-          <br>
-          <div class="field-wrapper">
-            {{ form.password2.errors }}
-            <label>Confirm password: </label>
-            {{ form.password2 }}
-          </div>
-          <br>
+          {% endfor %}
         </form>
         You already have an account? <a href="{% url 'login' %}">Login now!</a>
       </div>

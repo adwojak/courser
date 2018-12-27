@@ -20,13 +20,16 @@
         <div class="row">
           <div class="col-sm-2 my-auto">
             {{ field.label_tag }}
-            {% if field.help_text %}
-              <sup>{{ field.help_text }}</sup>
-            {% endif %}
             {{ field.errors }}
           </div>
           <div class="col-sm-10">
+            {% if field.id_for_label == 'id_course_photo' %}
+              <label class="btn btn-primary btn-file">
+                Browse <input type="file" name="{{ field.name }}" accept="image/*" id="{{ field.id_for_label }}" style="display: none;">
+              </label>
+            {% else %}
               {{ field }}
+            {% endif %}
           </div>
         </div>
         <br>

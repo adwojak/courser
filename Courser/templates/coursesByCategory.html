@@ -16,11 +16,11 @@
         {% for course in coursesByCategory %}
                 <div class="card flex-row flex-wrap w-75 border-top-0 border-left-0 border-right-0 py-4 mx-auto cardDiv" onclick="location.href='{% url 'course' course.id %}';">
                     <div class="card-header bg-white border-0 col-md-2">
-                            <img src="{{ course.course_photo.url }}" class="w-100">
-                        <!--{% if course.course_photo.is_exists %}-->
-                        <!--{% else %}-->
-                            <!--<img src="{% static 'Courser/images/default.png' %}" class="w-100" alt="No image.">-->
-                        <!--{% endif %}-->
+                        {% if course.course_photo %}
+                            <img src="{{ course.course_photo.url }}" class="w-100 img-fluid" alt="No image providen.">
+                        {% else %}
+                            <img src="{% static 'Courser/images/default.png' %}" class="w-100 img-fluid" alt="No image providen.">
+                        {% endif %}
                     </div>
                     <div class="card-block col-md-8">
                         <h4 class="card-title">{{ course.course_name }}</h4>
@@ -33,7 +33,6 @@
                     <div class="card-block px-2 ml-auto col-md-2">
                         <h4 class="card-title text-right"><strong>{{ course.course_price }} zł</strong></h4>
                     </div>
-                    <!--<li class="dropdown-divider w-100"></li>-->
                 </div>
         {% endfor %}
     {% else %}

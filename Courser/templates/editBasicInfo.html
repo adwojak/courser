@@ -10,7 +10,7 @@
     </h3>
   </div>
   <div class="container">
-        <div class="row float-right">
+    <div class="row float-right">
       <button type="submit" class="btn btn-success" form="editForm">Save profile</button>
     </div>
     <form method="post" enctype='multipart/form-data' id="editForm" class="form-horizontal">
@@ -20,14 +20,13 @@
         <div class="row">
           <div class="col-sm-2 my-auto">
             {{ field.label_tag }}
-            {% if field.help_text %}
-              <sup>{{ field.help_text }}</sup>
-            {% endif %}
             {{ field.errors }}
           </div>
           <div class="col-sm-10">
             {% if field.id_for_label == 'id_user_photo' %}
-              <input type="file" name="{{ field.name }}" accept="image/*" id="{{ field.id_for_label }}" class="btn btn-warning">
+              <label class="btn btn-primary btn-file">
+                Browse <input type="file" name="{{ field.name }}" accept="image/*" id="{{ field.id_for_label }}" style="display: none;">
+              </label>
             {% else %}
               {{ field }}
             {% endif %}
@@ -36,7 +35,6 @@
         <br>
       {% endfor %}
     </form>
-
   </div>
 </div>
 {% endblock %}

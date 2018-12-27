@@ -1,30 +1,46 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import (
+    MinLengthValidator,
+    MaxLengthValidator
+)
 from django.db.models import (
     CharField,
+    EmailField,
     FileField,
     ImageField,
-    OneToOneField,
     TextField,
     ForeignKey,
     IntegerField,
-    BooleanField,
+    DecimalField,
     CASCADE,
     Model
 )
+from PIL import Image
+from resizeimage import resizeimage
+from math import floor
+from io import BytesIO
+from sys import getsizeof
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 class CustomUser(AbstractUser):
-    email = CharField(max_length=50)
+    email = EmailField(unique=True)
     first_name = CharField(max_length=30, blank=True)
     last_name = CharField(max_length=50, blank=True)
     address = CharField(max_length=100, blank=True)
     city = CharField(max_length=50, blank=True)
-    zip_code = CharField(max_length=6, blank=True) # TODO poprawic
-    phone_number = CharField(max_length=9, blank=True) # TODO poprawic
+    zip_code = CharField(max_length=6, blank=True)
+    phone_number = IntegerField(blank=True)
     user_photo = ImageField(blank=True, null=True, upload_to="users/")
-    credit_card_number = IntegerField(blank=True, null=True)
-    credit_card_expire_date = CharField(max_length=4, blank=True, null=True)
-    credit_card_cvv = IntegerField(blank=True, null=True)
+    credit_card_number = IntegerField(blank=True, null=True, validators=[
+        MinLengthValidator(12),
+        MaxLengthValidator(19)
+    ])
+    credit_card_expire_date = CharField(max_length=5, blank=True, null=True)
+    credit_card_cvv = IntegerField(blank=True, null=True, validators=[
+        MinLengthValidator(3),
+        MaxLengthValidator(3)
+    ])
 
     def __str__(self):
         return self.username
@@ -37,6 +53,21 @@ class CustomUser(AbstractUser):
             self.credit_card_expire_date,
             self.credit_card_cvv
         ])
+
+    def save(self, *args, **kwargs):
+        with Image.open(self.user_photo) as image:
+            aspect = 2.095
+            width, height = image.size
+            if height < width:
+                width = floor(height * aspect)
+            elif height > width:
+                height = floor(width / aspect)
+            cover = resizeimage.resize_cover(image, [width, height])
+            output = BytesIO()
+            cover.save(output, image.format)
+            output.seek(0)
+            self.user_photo = InMemoryUploadedFile(output, 'ImageField', '{}.jpg'.format(self.user_photo.name.split('.')[0]), 'image/jpeg', getsizeof(output), None)
+            super(CustomUser, self).save()
 
 
 class Category(Model):
@@ -56,7 +87,7 @@ class CourseLevel(Model):
 class Course(Model):
     course_name = CharField(max_length=100)
     course_description = TextField(max_length=1000)
-    course_price = IntegerField()
+    course_price = DecimalField(max_digits=6, decimal_places=2)
     course_length = IntegerField(blank=True, null=True)
     course_photo = ImageField(blank=True, null=True, upload_to="courses/")
     course_video = FileField(blank=True, null=True, upload_to="videos/")
@@ -67,8 +98,23 @@ class Course(Model):
     def __str__(self):
         return self.course_name
 
+    def save(self, *args, **kwargs):
+        with Image.open(self.course_photo) as image:
+            aspect = 2.095
+            width, height = image.size
+            if height < width:
+                width = floor(height * aspect)
+            elif height > width:
+                height = floor(width / aspect)
+            cover = resizeimage.resize_cover(image, [width, height])
+            output = BytesIO()
+            cover.save(output, image.format)
+            output.seek(0)
+            self.course_photo = InMemoryUploadedFile(output, 'ImageField', '{}.jpg'.format(self.course_photo.name.split('.')[0]), 'image/jpeg', getsizeof(output), None)
+            super(Course, self).save()
+
+
 
 class Cart(Model):
-    course_id = IntegerField(default=0, null=False)
-    course_name = CharField(max_length=100)
-    course_price = IntegerField()
+    user = ForeignKey(CustomUser, on_delete=CASCADE)
+    course = ForeignKey(Course, on_delete=CASCADE)

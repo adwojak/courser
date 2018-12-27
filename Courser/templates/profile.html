@@ -4,7 +4,6 @@
 
 {% block content %}
 
-
     <div class="w-75 mx-auto">
         <div class="row mb-4 w-100">
             <h3 class="page-header mx-auto">
@@ -20,7 +19,11 @@
             <div class="col-sm-9">
                 <div class="row">
                     <div class="col-3">
-                        <img src="{% static 'Courser/images/default.png' %}" class="img-fluid" alt="No image.">
+                        {% if user_object.user_photo %}
+                            <img src="{{ user_object.user_photo.url }}" class="img-fluid" alt="No image providen.">
+                        {% else %}
+                            <img src="{% static 'Courser/images/default.png' %}" class="img-fluid" alt="No image providen.">
+                        {% endif %}
                     </div>
                     <div class="col-9">
                         <p>First name: {{ user_object.first_name }}</p>
@@ -28,7 +31,7 @@
                         <p>E-mail: {{ user_object.email }}</p>
                         <p>Address: {{ user_object.address }}</p>
                         <p>City: {{ user_object.city }} </p>
-                        <p>Zip-code: {{ user_object.city }}</p>
+                        <p>Zip-code: {{ user_object.zip_code }}</p>
                         <p>Card number: {{ user_object.credit_card_number }}</p>
                         <p>Card number exp date: {{ user_object.credit_card_expire_date }}</p>
                         <p>Card number cvv: {{ user_object.credit_card_cvv }}</p>
@@ -37,29 +40,5 @@
             </div>
         </div>
     </div>
-    <!--<div class="container">-->
-        <!--<div class="row">-->
-            <!--<h3 class="text-center page-header">-->
-                    <!--My profile-->
-            <!--</h3>-->
-            <!--<div class="col-sm-2">-->
-                <!--{% if user_object.user_photo.is_exists %}-->
-                    <!--<img src="{{ user_object.user_photo.url }}" class="img-responsive">-->
-                <!--{% else %}-->
-                    <!--<img src="{% static 'Courser/images/default.png' %}" class="img-responsive" alt="No image.">-->
-                <!--{% endif %}-->
-            <!--</div>-->
-            <!--<div class="col-sm-10">-->
-                <!--<p>First name: {{ user_object.first_name }}</p>-->
-                <!--<p>Last name: {{ user_object.last_name }}</p>-->
-                <!--<p>E-mail: {{ user_object.email }}</p>-->
-                <!--<p>Address: {{ user_object.address }}</p>-->
-                <!--<p>City: {{ user_object.city }} </p>-->
-                <!--<p>Zip-code: {{ user_object.city }}</p>-->
-            <!--</div>-->
-                    <!--<a href="{% url 'edit' %}" class="btn btn-primary">Edit profile</a>-->
-        <!--<a href="{% url 'password_change' %}" class="btn btn-primary">Change password</a>-->
 
-        <!--</div>-->
-    <!--</div>-->
 {% endblock %}

@@ -19,6 +19,7 @@ from django.forms import (
     ImageField,
     FileField,
     IntegerField,
+    DecimalField,
     ModelChoiceField,
     Select,
     ModelForm
@@ -34,15 +35,21 @@ from .widgets import CustomClearableFileInput
 
 
 class CustomUserCreationForm(UserCreationForm):
-    username = UsernameField(widget=TextInput(attrs={'class': 'form-control'}))
-    email = EmailField(widget=EmailInput(attrs={'class': 'form-control'}))
+    username = UsernameField(
+        label="Username",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    email = EmailField(
+        label="E-mail",
+        widget=EmailInput(attrs={'class': 'form-control'})
+    )
     password1 = CharField(
-        label=("Password1"),
+        label="Password",
         strip=False,
         widget=PasswordInput(attrs={'class': 'form-control'}),
     )
     password2 = CharField(
-        label=("Password2"),
+        label="Repeat password",
         strip=False,
         widget=PasswordInput(attrs={'class': 'form-control'}),
     )
@@ -53,7 +60,10 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class CustomAuthenticationForm(AuthenticationForm):
-    username = UsernameField(initial="", widget=TextInput(attrs={'class': 'form-control'}))
+    username = UsernameField(
+        initial="",
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
     password = CharField(
         label="Password",
         strip=False,
@@ -62,7 +72,10 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 class CustomPasswordResetForm(PasswordResetForm):
-    email = EmailField(widget=EmailInput(attrs={'class': 'form-control'}))
+    email = EmailField(
+        label="E-mail",
+        widget=EmailInput(attrs={'class': 'form-control'})
+    )
 
 
 class CustomSetPasswordForm(SetPasswordForm):
@@ -114,8 +127,16 @@ class CustomEditProfileForm(UserChangeForm):
         label="City",
         widget=TextInput(attrs={'class': 'form-control'})
     )
-    zip_code = CharField(
-        label="Zip-code",
+    zip_code_prefix = IntegerField(
+        label="Zip-code prefix",
+        min_value=10,
+        max_value=99,
+        widget=TextInput(attrs={'class': 'form-control'})
+    )
+    zip_code_suffix = IntegerField(
+        label="Zip-code suffix",
+        min_value=100,
+        max_value=999,
         widget=TextInput(attrs={'class': 'form-control'})
     )
     phone_number = CharField(
@@ -125,13 +146,13 @@ class CustomEditProfileForm(UserChangeForm):
     user_photo = ImageField(
         required=False,
         label="Choose photo",
-        widget=CustomClearableFileInput() # TODO Button w edit
+        widget=CustomClearableFileInput()
     )
     password = ReadOnlyPasswordHashField(label="", widget=HiddenInput())
 
     class Meta:
         model = CustomUser
-        fields = ('first_name', 'last_name', 'address', 'city', 'zip_code', 'phone_number', 'user_photo')
+        fields = ('first_name', 'last_name', 'address', 'city', 'zip_code_prefix', 'zip_code_suffix', 'phone_number', 'user_photo')
 
 
 class CustomEditPaymentForm(UserChangeForm):
@@ -163,7 +184,7 @@ class AddCourseForm(ModelForm):
         label="Course description",
         widget=Textarea(attrs={'class': 'form-control'})
     )
-    course_price = IntegerField(
+    course_price = DecimalField(
         label="Course price",
         widget=TextInput(attrs={'class': 'form-control'})
     )
@@ -184,14 +205,14 @@ class AddCourseForm(ModelForm):
     course_photo = ImageField(
         required=False,
         label="Choose photo",
-        widget=CustomClearableFileInput()  # TODO Button w edit
+        widget=CustomClearableFileInput()
     )
     course_video = FileField(
         required=False,
         label="Choose video",
-        widget=CustomClearableFileInput()  # TODO Button w edit
+        widget=CustomClearableFileInput()
     )
 
     class Meta:
         model = Course
-        fields = ('course_name', 'course_description', 'course_price', 'course_length', 'course_category', 'course_level')
+        fields = ('course_name', 'course_description', 'course_price', 'course_length', 'course_category', 'course_level', 'course_photo', 'course_video')

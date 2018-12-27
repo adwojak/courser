@@ -12,12 +12,19 @@ from django.contrib.auth.views import (
 )
 from django.shortcuts import resolve_url, redirect
 from django.urls import reverse_lazy
-from django.views import generic
-from django.views.generic import FormView
-from django.utils.decorators import method_decorator
+from django.views.generic import (
+    FormView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    ListView,
+    TemplateView
+)
 from django.contrib import messages
-from .decorators import anonymous_required
 from django.http import HttpResponseRedirect
+from PIL import Image
+from resizeimage import resizeimage
+from math import floor
 
 from .forms import (
     CustomUserCreationForm,
@@ -34,61 +41,52 @@ from .models import (
     Category,
     Cart
 )
+from .mixins import AnonymousRequiredMixin
 
 
-@method_decorator(anonymous_required, name='dispatch')
-class Login(LoginView, FormView):
+class Login(AnonymousRequiredMixin, LoginView, FormView):
     form_class = CustomAuthenticationForm
     template_name = 'registration/login.html'
 
     def get_success_url(self):
-        return resolve_url('home') # TODO zmienic
+        return resolve_url('home')
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class Logout(LogoutView):
+class Logout(LoginRequiredMixin, LogoutView):
     pass
 
 
-@method_decorator(anonymous_required, name='dispatch')
-class SignUp(generic.CreateView):
+class SignUp(AnonymousRequiredMixin, CreateView):
     form_class = CustomUserCreationForm
     template_name = 'registration/signup.html'
     success_url = reverse_lazy('login')
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class PasswordReset(PasswordResetView):
+class PasswordReset(AnonymousRequiredMixin, PasswordResetView):
     form_class = CustomPasswordResetForm
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class PasswordResetDone(PasswordResetDoneView):
+class PasswordResetDone(AnonymousRequiredMixin, PasswordResetDoneView):
     pass
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class PasswordResetConfirm(PasswordResetConfirmView):
+class PasswordResetConfirm(AnonymousRequiredMixin, PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class PasswordResetComplete(PasswordResetCompleteView):
+class PasswordResetComplete(AnonymousRequiredMixin, PasswordResetCompleteView):
     pass
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class PasswordChange(PasswordChangeView):
+class PasswordChange(LoginRequiredMixin, PasswordChangeView):
     form_class = CustomPasswordChangeForm
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class PasswordChangeDone(PasswordChangeDoneView):
+class PasswordChangeDone(LoginRequiredMixin, PasswordChangeDoneView):
     pass
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class EditBasicInformation(LoginRequiredMixin, generic.UpdateView):
+class EditBasicInformation(LoginRequiredMixin, UpdateView):
     form_class = CustomEditProfileForm
     success_url = reverse_lazy('profile')
     template_name = 'editBasicInfo.html'
@@ -96,15 +94,21 @@ class EditBasicInformation(LoginRequiredMixin, generic.UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        zip_code_prefix = form['zip_code_prefix'].value()
+        zip_code_suffix = form['zip_code_suffix'].value()
+        obj.zip_code = zip_code_prefix + "-" + zip_code_suffix
+        obj.save()
+        return HttpResponseRedirect(self.success_url)
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
+
 class EditPaymentInformation(EditBasicInformation):
     form_class = CustomEditPaymentForm
     template_name = 'editPaymentInfo.html'
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class MyProfile(LoginRequiredMixin, generic.DetailView):
+class MyProfile(LoginRequiredMixin, DetailView):
     template_name = 'profile.html'
     context_object_name = 'user_object'
 
@@ -112,7 +116,7 @@ class MyProfile(LoginRequiredMixin, generic.DetailView):
         return self.request.user
 
 
-class CoursesByCategoryListView(generic.ListView):
+class CoursesByCategoryListView(ListView):
     model = Course
     template_name = 'coursesByCategory.html'
     paginate_by = 12
@@ -125,7 +129,7 @@ class CoursesByCategoryListView(generic.ListView):
         return context
 
 
-class SearchListView(generic.ListView):
+class SearchListView(ListView):
     model = Course
     template_name = 'coursesByCategory.html'
     paginate_by = 12
@@ -140,12 +144,12 @@ class SearchListView(generic.ListView):
         return context
 
 
-class CourseDetailView(generic.DetailView):
+class CourseDetailView(DetailView):
     model = Course
     template_name = 'course.html'
 
 
-class HomeView(generic.TemplateView):
+class HomeView(TemplateView):
     template_name = 'home.html'
 
     def get_context_data(self, **kwargs):
@@ -159,26 +163,25 @@ class HomeView(generic.TemplateView):
         return context
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class MyCart(generic.ListView):
+class MyCart(LoginRequiredMixin, ListView):
     model = Cart
     template_name = 'myCart.html'
     paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['cart_list'] = self.model.objects.filter(user=self.request.user)
         context['total_price'] = self.get_total_price(self.model)
         return context
 
     def get_total_price(self, model):
         total_price = 0
-        for course in model.objects.all():
-            total_price += course.course_price
+        for cart_element in model.objects.all():
+            total_price += cart_element.course.course_price
         return total_price
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class Payment(generic.TemplateView):
+class Payment(LoginRequiredMixin, TemplateView):
     template_name = 'payment.html'
 
     def get_context_data(self, **kwargs):
@@ -186,16 +189,15 @@ class Payment(generic.TemplateView):
         payment_fulfilled = self.request.user.is_payment_fulfilled()
         context['user_payment_info'] = payment_fulfilled
         if payment_fulfilled:
-            self.delete_objects()
+            self.delete_objects(self.request.user)
         return context
 
-    def delete_objects(self):
-        ss = Cart.objects.all()
-        ss.delete()
+    def delete_objects(self, user):
+        objects_to_delete = Cart.objects.filter(user=user)
+        objects_to_delete.delete()
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class AddCourse(generic.CreateView):
+class AddCourse(LoginRequiredMixin, CreateView):
     form_class = AddCourseForm
     template_name = 'addCourse.html'
     success_url = reverse_lazy('home')
@@ -207,6 +209,7 @@ class AddCourse(generic.CreateView):
         return HttpResponseRedirect(self.success_url)
 
 
+@login_required
 def delete_from_cart(request, pk):
     course_to_delete = Cart.objects.filter(pk=pk)
     if course_to_delete.exists():
@@ -215,13 +218,13 @@ def delete_from_cart(request, pk):
     return redirect(reverse_lazy('myCart'))
 
 
+@login_required
 def add_to_cart(request, pk):
     try:
         course = Course.objects.filter(pk=pk)[0]
         course_id = course.id
-        course_name = course.course_name
-        course_price = course.course_price
-        cart = Cart(course_id=course_id, course_name=course_name, course_price=course_price)
+        user = request.user
+        cart = Cart(user=user, course=course)
         cart.save()
         message_text = "Course has been added to cart"
     except:

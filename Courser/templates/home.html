@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Home{% endblock %}
 
 {% block content %}
@@ -9,7 +9,11 @@
     {% for course in lastCourses %}
     <div class="card mx-2 cardDiv" onclick="location.href='{% url 'course' course.id %}';">
         <div class="card-img-top center-cropped">
-            <img src="{{ course.course_photo.url }}" alt="No image providen.">
+            {% if course.course_photo %}
+                <img src="{{ course.course_photo.url }}" alt="No image providen.">
+            {% else %}
+                <img src="{% static 'Courser/images/default.png' %}" alt="No image providen.">
+            {% endif %}
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ course.course_name }}</h5>
@@ -24,7 +28,11 @@
     {% for course in lastCoursesInCategory %}
     <div class="card mx-2 cardDiv" onclick="location.href='{% url 'course' course.id %}';">
         <div class="card-img-top center-cropped">
-            <img src="{{ course.course_photo.url }}" alt="No image providen.">
+            {% if course.course_photo %}
+                <img src="{{ course.course_photo.url }}" alt="No image providen.">
+            {% else %}
+                <img src="{% static 'Courser/images/default.png' %}" alt="No image providen.">
+            {% endif %}
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ course.course_name }}</h5>
@@ -45,5 +53,4 @@
     {% endfor %}
 </div>
 <br><br><br>
-s
 {% endblock %}

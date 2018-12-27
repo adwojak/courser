@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'address', 'city', 'zip_code', 'phone_number')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'address', 'city', 'zip_code', 'phone_number', 'user_photo')}),
         ('Pyment info', {'fields': ('credit_card_number', 'credit_card_expire_date', 'credit_card_cvv')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
