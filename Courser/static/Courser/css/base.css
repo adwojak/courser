@@ -80,12 +80,17 @@ div.center-cropped img {
 }
 
 .home-image {
-    background-image: url("https://images.pexels.com/photos/36990/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+    background-image: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,1)), url("https://images.pexels.com/photos/36990/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
     background-position: 80% 80%;
     background-repeat: no-repeat;
     background-size: cover;
     padding-left: 0;
     padding-right: 0;
+    text-shadow: white 0px 0px 10px;
+}
+
+.btn-join {
+  background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
 }
 
 hr.hr-styling {

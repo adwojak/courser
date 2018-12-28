@@ -23,21 +23,21 @@
                     <tbody>
                         {% for cart_element in cart_list %}
                             <tr class="clickable" data-href="{% url 'course' cart_element.course.id %}">
-                                <th class="col" scope="row">
+                                <th class="col-md-3" scope="row">
                                     {% if cart_element.course.course_photo %}
                                         <img src="{{ cart_element.course.course_photo.url }}" class="img-fluid" alt="No image providen.">
                                     {% else %}
                                         <img src="{% static 'Courser/images/default.png' %}" class="img-fluid" alt="No image providen.">
                                     {% endif %}
                                 </th>
-                                <td class="col" style="word-wrap: break-word;">
+                                <td class="col-md-5" style="word-wrap: break-word;">
                                     <p>{{ cart_element.course.course_name|truncatechars:100 }}</p>
                                     <p>asdasd</p>
                                 </td>
-                                <td class="col text-right text-primary">
+                                <td class="col-md-3 text-right text-primary">
                                     <h3>{{ cart_element.course.course_price }} zł</h3>
                                 </td>
-                                <td class="col text-right"><a href="{% url 'deleteCourse' cart_element.id %}" class="deleteBtn small text-danger"><strong>Delete</strong></a></td>
+                                <td class="col-md-1 text-right"><a href="{% url 'deleteCourse' cart_element.id %}" class="deleteBtn small text-danger"><strong>Delete</strong></a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
