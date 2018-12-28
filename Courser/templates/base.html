@@ -18,6 +18,9 @@
   </head>
   <body>
 
+
+
+  
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand ml-5" href="{% url 'home' %}">Courser</a>
@@ -37,26 +40,31 @@
             {% endfor %}
         </div>
       </li>
+      <li class="nav-item">
+        <form action="{% url 'search' %}" id="searchForm">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search..." name="searchInput">
+            <div class="input-group-append">
+                <button class="btn btn-outline-success" type="submit" form="searchForm"><i class="fa fa-search"></i></button>
+            </div>
+          </div>
+        </form>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      {% if user.is_authenticated == False %}
+        <a class="btn" href="{% url 'signup' %}" role="button">Register</a>
+        <a class="btn btn-primary" href="{% url 'login' %}" role="button">Login</a>
+
+      {% endif %}
+      {% if user.is_authenticated == True %}
+        <a class="btn" href="{% url 'addCourse' %}" role="button">Add course</a>
+        <a class="btn" href="{% url 'myCart' %}" role="button">My cart</a>
+        <a class="btn" href="{% url 'profile' %}" role="button">My profile</a>
+        <a class="btn btn-danger" href="{% url 'logout' %}" role="button">Logout</a>
+      {% endif %}
     </ul>
   </div>
-  <form class="form-inline my-2 my-lg-0 mr-5" action="{% url 'search' %}" id="searchForm">
-    <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search..." name="searchInput">
-    <div class="input-group-append">
-        <button class="btn btn-outline-success" type="submit" form="searchForm"><i class="fa fa-search"></i></button>
-    </div>
-    {% if user.is_authenticated == False %}
-        <a class="btn btn-success ml-3" href="{% url 'signup' %}" role="button">Register</a>
-        <a class="btn btn-danger ml-1" href="{% url 'login' %}" role="button">Login</a>
-    {% endif %}
-    {% if user.is_authenticated == True %}
-        <a class="btn btn-success ml-3" href="{% url 'addCourse' %}" role="button">Add course</a>
-        <a class="btn btn-success ml-3" href="{% url 'myCart' %}" role="button">My cart</a>
-        <a class="btn btn-success ml-3" href="{% url 'profile' %}" role="button">My profile</a>
-        <a class="btn btn-danger ml-1" href="{% url 'logout' %}" role="button">Logout</a>
-    {% endif %}
-  </div>
-  </form>
 </nav>
 <!--End navbar -->
 

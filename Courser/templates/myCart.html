@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}My cart{% endblock %}
 
 {% block content %}
+<div class="w-100 bg-secondary py-5">
+    <div class="w-50 mx-auto">
+        <h2 class="display-4 text-light">My cart</h2>
+    </div>
+</div>
     {% if messages %}
         <ul class="w-100 text-center text-danger h6 list-unstyled">
             {% for message in messages %}
@@ -10,38 +15,42 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <div class="w-75 mx-auto">
-        {% if cart_list %}
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col" class="col-1"><strong>No.</strong></th>
-                        <th scope="col" class="col-8"><strong>Title</strong></th>
-                        <th scope="col" class="col-2"><strong>Price</strong></th>
-                        <th scope="col" class="col-1"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cart_element in cart_list %}
-                        <tr class="clickable" data-href="{% url 'course' cart_element.course.id %}">
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td style="word-wrap: break-word;">{{ cart_element.course.course_name }}</td>
-                            <td class="text-right">{{ cart_element.course.course_price }} zł</td>
-                            <td class="text-right"><a href="{% url 'deleteCourse' cart_element.id %}" class="deleteBtn small text-danger"><strong>Delete</strong></a></td>
-                        </tr>
-                    {% endfor %}
-                    <tr>
-                        <th></th>
-                        <td></td>
-                        <td class="text-right"><strong>Total price:</strong>{{ total_price }} zł</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        <a href="{% url 'payment' %}" class="btn btn-success float-right">Proceed to payment</a>
-        {% else %}
-            <p class="mt-4">There are no courses in cart.</p>
-        {% endif %}
+    <div class="col-md-9 mx-auto row">
+        <div class="col-md-8 float-left">
+            <h3 class="pt-4">{{ cartElementsCount }} courses in cart</h3>
+            {% if cart_list %}
+                <table class="table table-striped table-hover">
+                    <tbody>
+                        {% for cart_element in cart_list %}
+                            <tr class="clickable" data-href="{% url 'course' cart_element.course.id %}">
+                                <th class="col" scope="row">
+                                    {% if cart_element.course.course_photo %}
+                                        <img src="{{ cart_element.course.course_photo.url }}" class="img-fluid" alt="No image providen.">
+                                    {% else %}
+                                        <img src="{% static 'Courser/images/default.png' %}" class="img-fluid" alt="No image providen.">
+                                    {% endif %}
+                                </th>
+                                <td class="col" style="word-wrap: break-word;">
+                                    <p>{{ cart_element.course.course_name|truncatechars:100 }}</p>
+                                    <p>asdasd</p>
+                                </td>
+                                <td class="col text-right text-primary">
+                                    <h3>{{ cart_element.course.course_price }} zł</h3>
+                                </td>
+                                <td class="col text-right"><a href="{% url 'deleteCourse' cart_element.id %}" class="deleteBtn small text-danger"><strong>Delete</strong></a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="mt-4">There are no courses in cart.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-4 float-left">
+            <h3 class="text-muted">Total price:</h3>
+            <h2><strong class="display-3">{{ total_price }} zł</strong></h2>
+            <a href="{% url 'payment' %}" class="btn btn-success w-100">Proceed to payment</a>
+        </div>
     </div>
 
     <script type="text/javascript">

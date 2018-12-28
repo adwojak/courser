@@ -55,19 +55,20 @@ class CustomUser(AbstractUser):
         ])
 
     def save(self, *args, **kwargs):
-        with Image.open(self.user_photo) as image:
-            aspect = 2.095
-            width, height = image.size
-            if height < width:
-                width = floor(height * aspect)
-            elif height > width:
-                height = floor(width / aspect)
-            cover = resizeimage.resize_cover(image, [width, height])
-            output = BytesIO()
-            cover.save(output, image.format)
-            output.seek(0)
-            self.user_photo = InMemoryUploadedFile(output, 'ImageField', '{}.jpg'.format(self.user_photo.name.split('.')[0]), 'image/jpeg', getsizeof(output), None)
-            super(CustomUser, self).save()
+        if self.user_photo:
+            with Image.open(self.user_photo) as image:
+                aspect = 2.095
+                width, height = image.size
+                if height < width:
+                    width = floor(height * aspect)
+                elif height > width:
+                    height = floor(width / aspect)
+                cover = resizeimage.resize_cover(image, [width, height])
+                output = BytesIO()
+                cover.save(output, image.format)
+                output.seek(0)
+                self.user_photo = InMemoryUploadedFile(output, 'ImageField', '{}.jpg'.format(self.user_photo.name.split('.')[0]), 'image/jpeg', getsizeof(output), None)
+                super(CustomUser, self).save()
 
 
 class Category(Model):

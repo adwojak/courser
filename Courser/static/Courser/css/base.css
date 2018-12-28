@@ -78,3 +78,18 @@ div.center-cropped img {
     cursor: inherit;
     display: block;
 }
+
+.home-image {
+    background-image: url("https://images.pexels.com/photos/36990/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+    background-position: 80% 80%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+hr.hr-styling {
+    border: 0;
+    height: 5px;
+    background: #428bca;
+}

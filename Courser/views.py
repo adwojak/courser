@@ -123,9 +123,11 @@ class CoursesByCategoryListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        query = Course.objects.filter(course_category__id=self.kwargs['pk'])
+        pk = self.kwargs['pk']
+        query = Course.objects.filter(course_category__id=pk)
         context['coursesByCategory'] = query
         context['coursesCount'] = query.count()
+        context['categoryName'] = Category.objects.get(id=pk)
         return context
 
 
@@ -172,6 +174,7 @@ class MyCart(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['cart_list'] = self.model.objects.filter(user=self.request.user)
         context['total_price'] = self.get_total_price(self.model)
+        context['cartElementsCount'] = context['cart_list'].count()
         return context
 
     def get_total_price(self, model):

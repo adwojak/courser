@@ -4,12 +4,12 @@
 
 {% block content %}
     <div class="row col-md-12 mx-auto py-4 bg-info">
-        <h2 class="col-md-10 mx-auto display-4">Topic: {% if topic %} {{ topic }} {% else %} {{ coursesByCategory.first.course_category }} {% endif %}</h2>
+        <h2 class="col-md-10 mx-auto display-4">Topic: {% if topic %} {{ topic }} {% else %} {{ categoryName }} {% endif %}</h2>
     </div>
 
     <div class="row col-md-12 mx-auto py-4 bg-light">
         <h3 class="col-md-10 mx-auto">
-            Courses in category {{ coursesByCategory.first.course_category }}: {{ coursesCount }}
+            Courses in {% if topic %} topic {% else %} category {% endif %}: {{ coursesCount }}
         </h3>
     </div>
     {% if coursesByCategory %}
@@ -23,12 +23,12 @@
                         {% endif %}
                     </div>
                     <div class="card-block col-md-8">
-                        <h4 class="card-title">{{ course.course_name }}</h4>
-                        <h6 class="small">{{ course.course_length }} minutes of video
+                        <h2 class="card-title">{{ course.course_name }}</h2>
+                        <h3 class="small text-muted">{{ course.course_length }} minutes of video
                             <i class='far fa-dot-circle'></i>
                             {{ course.course_level }}
-                        </h6>
-                        <p class="card-text">{{ course.course_description | truncatechars:340 }}</p>
+                        </h3>
+                        <h3 class="card-text">{{ course.course_description | truncatechars:340 }}</h3>
                     </div>
                     <div class="card-block px-2 ml-auto col-md-2">
                         <h4 class="card-title text-right"><strong>{{ course.course_price }} zł</strong></h4>

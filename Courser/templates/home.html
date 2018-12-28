@@ -4,7 +4,22 @@
 
 {% block content %}
 
-<div class="mx-auto mt-4 mb-2 col-md-11"><p class="ml-2">Newest courses:</p></div>
+<div class="container-fluid home-image py-5">
+    <div class="w-75 mx-auto py-5">
+        <div class="py-5">
+            <h2 class="pt-5">Search courses and learn!</h2>
+            <h2 class="py-2">100% online learning from the world’s best developers and teachers!</h2>
+            <h2 class="py-2">You can learn whenever You want!</h2>
+            <div class="row pt-2 pb-5">
+                <a class="btn btn-primary" href="{% url 'signup' %}" role="button">Join for free!</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="mx-auto mt-4 mb-2 col-md-11"><h2 class="ml-2">Newest courses:</h2></div>
+<hr class="col-md-11 mx-auto hr-styling">
 <div class="card-deck mx-auto col-md-11">
     {% for course in lastCourses %}
     <div class="card mx-2 cardDiv" onclick="location.href='{% url 'course' course.id %}';">
@@ -16,14 +31,17 @@
             {% endif %}
         </div>
         <div class="card-body">
-            <h5 class="card-title">{{ course.course_name }}</h5>
-            <p class="card-text">{{ course.course_price }} zł</p>
+            <h4 class="card-title">{{ course.course_name|truncatechars:55 }}</h4>
+            <h5 class="card-subtitle mb-2 text-muted">Author: {{ course.course_author }}</h5>
+            <h5 class="card-subtitle mb-2 text-muted">Level: {{ course.course_level }}</h5>
+            <h2 class="card-text float-right text-primary">{{ course.course_price }} zł</p>
         </div>
     </div>
     {% endfor %}
 </div>
 
-<div class="mx-auto mt-4 mb-2 col-md-11"><p class="ml-2">Category programming:</p></div>
+<div class="mx-auto mt-4 mb-2 col-md-11"><h2 class="ml-2">Category programming:</h2></div>
+<hr class="col-md-11 mx-auto hr-styling">
 <div class="card-deck mx-auto col-md-11">
     {% for course in lastCoursesInCategory %}
     <div class="card mx-2 cardDiv" onclick="location.href='{% url 'course' course.id %}';">
@@ -35,15 +53,18 @@
             {% endif %}
         </div>
         <div class="card-body">
-            <h5 class="card-title">{{ course.course_name }}</h5>
-            <p class="card-text">{{ course.course_price }} zł</p>
+            <h4 class="card-title">{{ course.course_name|truncatechars:55 }}</h4>
+            <h5 class="card-subtitle mb-2 text-muted">Author: {{ course.course_author }}</h5>
+            <h5 class="card-subtitle mb-2 text-muted">Level: {{ course.course_level }}</h5>
+            <h2 class="card-text float-right text-primary">{{ course.course_price }} zł</p>
         </div>
     </div>
     {% endfor %}
 </div>
 
-<div class="mx-auto mt-4 col-md-11"><p class="ml-2">Popular categories:</p></div>
-<div class="card-deck mx-auto col-md-11 mb-4">
+<div class="mx-auto mt-4 mb-2 col-md-11"><h2 class="ml-2">Popular categories:</h2></div>
+<hr class="col-md-11 mx-auto hr-styling">
+<div class="card-deck mx-auto col-md-8 mb-4">
     {% for category in lastCategories %}
     <div class="card mx-2 cardDiv" onclick="location.href='{% url 'coursesByCategory' category.id %}';">
         <div class="card-body">
