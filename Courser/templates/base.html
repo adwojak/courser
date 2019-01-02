@@ -56,8 +56,7 @@
         <a class="btn" href="{% url 'signup' %}" role="button">Register</a>
         <a class="btn btn-primary" href="{% url 'login' %}" role="button">Login</a>
 
-      {% endif %}
-      {% if user.is_authenticated == True %}
+      {% else %}
         <a class="btn" href="{% url 'addCourse' %}" role="button">Add course</a>
         <a class="btn" href="{% url 'myCart' %}" role="button">My cart</a>
         <a class="btn" href="{% url 'profile' %}" role="button">My profile</a>

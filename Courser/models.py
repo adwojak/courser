@@ -30,7 +30,7 @@ class CustomUser(AbstractUser):
     address = CharField(max_length=100, blank=True)
     city = CharField(max_length=50, blank=True)
     zip_code = CharField(max_length=6, blank=True)
-    phone_number = IntegerField(blank=True)
+    phone_number = IntegerField(max_length=12, blank=True)
     user_photo = ImageField(blank=True, null=True, upload_to="users/")
     credit_card_number = IntegerField(blank=True, null=True, validators=[
         MinLengthValidator(12),

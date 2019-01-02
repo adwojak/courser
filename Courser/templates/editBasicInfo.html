@@ -10,9 +10,6 @@
     </h3>
   </div>
   <div class="container">
-    <div class="row float-right">
-      <button type="submit" class="btn btn-success" form="editForm">Save profile</button>
-    </div>
     <form method="post" enctype='multipart/form-data' id="editForm" class="form-horizontal">
       {% csrf_token %}
       {{ form.non_field_errors }}
@@ -35,6 +32,9 @@
         <br>
       {% endfor %}
     </form>
+  </div>
+  <div class="row float-right">
+    <button type="submit" class="btn btn-success" form="editForm">Save profile</button>
   </div>
 </div>
 {% endblock %}

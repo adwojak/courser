@@ -4,9 +4,6 @@
 
 {% block content %}
 <div class="w-50 mx-auto">
-  <div class="row float-right">
-    <button type="submit" class="btn btn-success" form="editForm">Add course</button>
-  </div>
   <div class="row mb-4">
     <h3 class="page-header mx-auto">
       Add course
@@ -16,25 +13,105 @@
     <form method="post" enctype='multipart/form-data' id="editForm" class="form-horizontal">
       {% csrf_token %}
       {{ form.non_field_errors }}
-      {% for field in form %}
-        <div class="row">
-          <div class="col-sm-2 my-auto">
-            {{ field.label_tag }}
-            {{ field.errors }}
-          </div>
-          <div class="col-sm-10">
-            {% if field.id_for_label == 'id_course_photo' %}
-              <label class="btn btn-primary btn-file">
-                Browse <input type="file" name="{{ field.name }}" accept="image/*" id="{{ field.id_for_label }}" style="display: none;">
-              </label>
-            {% else %}
-              {{ field }}
-            {% endif %}
-          </div>
+      <div class="row">
+        Add name and description of course
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-2 my-auto">
+          {{ form.course_name.label_tag }}
+          {{ form.course_name.errors }}
         </div>
-        <br>
-      {% endfor %}
+        <div class="col-sm-10">
+          {{ form.course_name }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 my-auto">
+          {{ form.course_description.label_tag }}
+          {{ form.course_description.errors }}
+        </div>
+        <div class="col-sm-10">
+          {{ form.course_description }}
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        And now choose category and level of course
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-2 my-auto">
+          {{ form.course_category.label_tag }}
+          {{ form.course_category.errors }}
+        </div>
+        <div class="col-sm-10">
+          {{ form.course_category }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 my-auto">
+          {{ form.course_level.label_tag }}
+          {{ form.course_level.errors }}
+        </div>
+        <div class="col-sm-10">
+          {{ form.course_level }}
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        Price your course and tell everyone how long it is
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-2 my-auto">
+          {{ form.course_price.label_tag }}
+          {{ form.course_price.errors }}
+        </div>
+        <div class="col-sm-10">
+          {{ form.course_price }}
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-2 my-auto">
+          {{ form.course_length.label_tag }}
+          {{ form.course_length.errors }}
+        </div>
+        <div class="col-sm-10">
+          {{ form.course_length }}
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        In last step, set profile image and video demo of your course
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-2 my-auto">
+          {{ form.course_photo.label_tag }}
+          {{ form.course_photo.errors }}
+        </div>
+        <div class="col-sm-10">
+          <label class="btn btn-primary btn-file">
+            Browse <input type="file" name="{{ form.course_photo.name }}" accept="image/*" id="{{ form.course_photo.id_for_label }}" style="display: none;">
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 my-auto">
+          {{ form.course_video.label_tag }}
+          {{ form.course_video.errors }}
+        </div>
+        <div class="col-sm-10">
+          <label class="btn btn-primary btn-file">
+            Browse <input type="file" name="{{ form.course_video.name }}" accept="image/*" id="{{ form.course_video.id_for_label }}" style="display: none;">
+          </label>
+        </div>
+      </div>
     </form>
+    <div class="row float-right">
+      <button type="submit" class="btn btn-success" form="editForm">Add course</button>
+    </div>
   </div>
 </div>
 {% endblock %}

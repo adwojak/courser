@@ -156,9 +156,10 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        query_courses = Course.objects.all()[:6]
+        courses = Course.objects.all()
+        query_courses = courses[len(courses)-6:]
         context['lastCourses'] = query_courses
-        query_courses_in_category = Course.objects.all()[:6]
+        query_courses_in_category = Course.objects.filter(course_category=3)
         context['lastCoursesInCategory'] = query_courses_in_category
         query_categories = Category.objects.all()[:4]
         context['lastCategories'] = query_categories

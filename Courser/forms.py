@@ -21,10 +21,13 @@ from django.forms import (
     IntegerField,
     DecimalField,
     ModelChoiceField,
+    DateField,
+    DateInput,
     Select,
     ModelForm
 )
 from django.contrib.auth.password_validation import password_validators_help_text_html
+from django.core.validators import RegexValidator
 from .models import (
     CustomUser,
     Course,
@@ -113,34 +116,44 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 class CustomEditProfileForm(UserChangeForm):
     first_name = CharField(
         label="First name",
+        max_length=30,
         widget=TextInput(attrs={'class': 'form-control'})
     )
     last_name = CharField(
         label="Last name",
+        max_length=50,
         widget=TextInput(attrs={'class': 'form-control'})
     )
     address = CharField(
         label="Address",
+        max_length=100,
         widget=TextInput(attrs={'class': 'form-control'})
     )
     city = CharField(
         label="City",
+        max_length=50,
+        validators=[RegexValidator(r'^[a-zA-z]+$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
-    zip_code_prefix = IntegerField(
+    zip_code_prefix = CharField(
         label="Zip-code prefix",
-        min_value=10,
-        max_value=99,
+        min_length=2,
+        max_length=2,
+        validators=[RegexValidator(r'^\d{1,10}$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
-    zip_code_suffix = IntegerField(
+    zip_code_suffix = CharField(
         label="Zip-code suffix",
-        min_value=100,
-        max_value=999,
+        min_length=3,
+        max_length=3,
+        validators=[RegexValidator(r'^\d{1,10}$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
     phone_number = CharField(
         label="Phone number",
+        min_length=8,
+        max_length=12,
+        validators=[RegexValidator(r'^\d{1,10}$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
     user_photo = ImageField(
@@ -156,16 +169,22 @@ class CustomEditProfileForm(UserChangeForm):
 
 
 class CustomEditPaymentForm(UserChangeForm):
-    credit_card_number = IntegerField(
+    credit_card_number = CharField(
         label="Credit card number",
+        min_length=12,
+        max_length=19,
+        validators=[RegexValidator(r'^\d{1,10}$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
     credit_card_expire_date = CharField(
         label="Credit card expire date",
         widget=TextInput(attrs={'class': 'form-control'})
     )
-    credit_card_cvv = IntegerField(
+    credit_card_cvv = CharField(
         label="Credit card cvv number",
+        min_length=3,
+        max_length=3,
+        validators=[RegexValidator(r'^\d{1,10}$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
     password = ReadOnlyPasswordHashField(label="", widget=HiddenInput())
@@ -178,18 +197,24 @@ class CustomEditPaymentForm(UserChangeForm):
 class AddCourseForm(ModelForm):
     course_name = CharField(
         label="Course name",
+        max_length=100,
         widget=TextInput(attrs={'class': 'form-control'})
     )
     course_description = CharField(
         label="Course description",
+        max_length=1000,
         widget=Textarea(attrs={'class': 'form-control'})
     )
     course_price = DecimalField(
         label="Course price",
+        max_digits=6,
+        decimal_places=2,
         widget=TextInput(attrs={'class': 'form-control'})
     )
     course_length = IntegerField(
         label="Course length",
+        min_value=1,
+        max_value=99999,
         widget=TextInput(attrs={'class': 'form-control'})
     )
     course_category = ModelChoiceField(
@@ -203,7 +228,6 @@ class AddCourseForm(ModelForm):
         queryset=CourseLevel.objects.all()
     )
     course_photo = ImageField(
-        required=False,
         label="Choose photo",
         widget=CustomClearableFileInput()
     )

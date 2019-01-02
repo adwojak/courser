@@ -3,11 +3,13 @@
 {% block title %}My cart{% endblock %}
 
 {% block content %}
-<div class="w-100 bg-secondary py-5">
     <div class="w-50 mx-auto">
-        <h2 class="display-4 text-light">My cart</h2>
+      <div class="row mb-4">
+        <h3 class="page-header mx-auto">
+          My cart
+        </h3>
+      </div>
     </div>
-</div>
     {% if messages %}
         <ul class="w-100 text-center text-danger h6 list-unstyled">
             {% for message in messages %}
