@@ -23,6 +23,7 @@ from django.forms import (
     ModelChoiceField,
     DateField,
     DateInput,
+    ChoiceField,
     Select,
     ModelForm
 )
@@ -49,12 +50,12 @@ class CustomUserCreationForm(UserCreationForm):
     password1 = CharField(
         label="Password",
         strip=False,
-        widget=PasswordInput(attrs={'class': 'form-control'}),
+        widget=PasswordInput(attrs={'class': 'form-control'})
     )
     password2 = CharField(
         label="Repeat password",
         strip=False,
-        widget=PasswordInput(attrs={'class': 'form-control'}),
+        widget=PasswordInput(attrs={'class': 'form-control'})
     )
 
     class Meta(UserCreationForm.Meta):
@@ -139,21 +140,21 @@ class CustomEditProfileForm(UserChangeForm):
         label="Zip-code prefix",
         min_length=2,
         max_length=2,
-        validators=[RegexValidator(r'^\d{1,10}$')],
+        validators=[RegexValidator(r'^\d+$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
     zip_code_suffix = CharField(
         label="Zip-code suffix",
         min_length=3,
         max_length=3,
-        validators=[RegexValidator(r'^\d{1,10}$')],
+        validators=[RegexValidator(r'^\d+$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
     phone_number = CharField(
         label="Phone number",
         min_length=8,
         max_length=12,
-        validators=[RegexValidator(r'^\d{1,10}$')],
+        validators=[RegexValidator(r'^\d+$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
     user_photo = ImageField(
@@ -173,25 +174,31 @@ class CustomEditPaymentForm(UserChangeForm):
         label="Credit card number",
         min_length=12,
         max_length=19,
-        validators=[RegexValidator(r'^\d{1,10}$')],
+        validators=[RegexValidator(r'^\d+$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
-    credit_card_expire_date = CharField(
-        label="Credit card expire date",
-        widget=TextInput(attrs={'class': 'form-control'})
+    credit_card_expire_date_prefix = ChoiceField(
+        label='Credit card expire month',
+        choices=tuple([(month, month) for month in range(1, 13)]),
+        widget=Select(attrs={'class': 'form-control'}),
+    )
+    credit_card_expire_date_suffix = ChoiceField(
+        label='Credit card expire year',
+        choices=tuple([(year, year) for year in range(2019, 2030)]),
+        widget=Select(attrs={'class': 'form-control'}),
     )
     credit_card_cvv = CharField(
         label="Credit card cvv number",
         min_length=3,
         max_length=3,
-        validators=[RegexValidator(r'^\d{1,10}$')],
+        validators=[RegexValidator(r'^\d+$')],
         widget=TextInput(attrs={'class': 'form-control'})
     )
     password = ReadOnlyPasswordHashField(label="", widget=HiddenInput())
 
     class Meta:
         model = CustomUser
-        fields = ('credit_card_number', 'credit_card_expire_date', 'credit_card_cvv')
+        fields = ('credit_card_number', 'credit_card_expire_date_prefix', 'credit_card_expire_date_suffix', 'credit_card_cvv')
 
 
 class AddCourseForm(ModelForm):

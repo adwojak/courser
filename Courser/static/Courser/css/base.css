@@ -80,7 +80,7 @@ div.center-cropped img {
 }
 
 .home-image {
-    background-image: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,1)), url("https://images.pexels.com/photos/36990/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+    background-image: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,1)), url('../images/homephoto.jpg');
     background-position: 80% 80%;
     background-repeat: no-repeat;
     background-size: cover;

@@ -32,9 +32,9 @@
                         <p>Address: {{ user_object.address }}</p>
                         <p>City: {{ user_object.city }} </p>
                         <p>Zip-code: {{ user_object.zip_code }}</p>
-                        <p>Card number: {{ user_object.credit_card_number }}</p>
-                        <p>Card number exp date: {{ user_object.credit_card_expire_date }}</p>
-                        <p>Card number cvv: {{ user_object.credit_card_cvv }}</p>
+                        <p>Card number: {% if user_object.credit_card_number %} {{ user_object.credit_card_number }} {% endif %}</p>
+                        <p>Card number exp date: {% if user_object.credit_card_expire_date %} {{ user_object.credit_card_expire_date }} {% endif %}</p>
+                        <p>Card number cvv: {% if user_object.credit_card_cvv %} {{ user_object.credit_card_cvv }} {% endif %}</p>
                     </div>
                 </div>
             </div>

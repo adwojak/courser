@@ -22,9 +22,8 @@ from django.views.generic import (
 )
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from PIL import Image
-from resizeimage import resizeimage
-from math import floor
+from random import choice
+
 
 from .forms import (
     CustomUserCreationForm,
@@ -103,9 +102,21 @@ class EditBasicInformation(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class EditPaymentInformation(EditBasicInformation):
+class EditPaymentInformation(LoginRequiredMixin, UpdateView):
     form_class = CustomEditPaymentForm
+    success_url = reverse_lazy('profile')
     template_name = 'editPaymentInfo.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        credit_card_expire_date_prefix = form['credit_card_expire_date_prefix'].value()
+        credit_card_expire_date_suffix = form['credit_card_expire_date_suffix'].value()
+        obj.credit_card_expire_date = credit_card_expire_date_prefix + "/" + credit_card_expire_date_suffix
+        obj.save()
+        return HttpResponseRedirect(self.success_url)
 
 
 class MyProfile(LoginRequiredMixin, DetailView):
@@ -157,13 +168,23 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         courses = Course.objects.all()
-        query_courses = courses[len(courses)-6:]
+        query_courses_length = len(courses)-6 if len(courses)-6 > 0 else 0
+        query_courses = courses[query_courses_length:]
         context['lastCourses'] = query_courses
-        query_courses_in_category = Course.objects.filter(course_category=3)
-        context['lastCoursesInCategory'] = query_courses_in_category
+        random_category = self.get_random_category()
+        if random_category:
+            random_category_id = random_category.pk
+            query_courses_in_category = Course.objects.filter(course_category=random_category_id)
+            context['lastCoursesInCategoryCategoryName'] = random_category.category_name
+            context['lastCoursesInCategory'] = query_courses_in_category
         query_categories = Category.objects.all()[:4]
         context['lastCategories'] = query_categories
         return context
+
+    def get_random_category(self):
+        available_categories = Category.objects.all()
+        if available_categories:
+            return choice(available_categories)
 
 
 class MyCart(LoginRequiredMixin, ListView):

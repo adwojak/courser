@@ -32,15 +32,9 @@ class CustomUser(AbstractUser):
     zip_code = CharField(max_length=6, blank=True)
     phone_number = IntegerField(max_length=12, blank=True)
     user_photo = ImageField(blank=True, null=True, upload_to="users/")
-    credit_card_number = IntegerField(blank=True, null=True, validators=[
-        MinLengthValidator(12),
-        MaxLengthValidator(19)
-    ])
-    credit_card_expire_date = CharField(max_length=5, blank=True, null=True)
-    credit_card_cvv = IntegerField(blank=True, null=True, validators=[
-        MinLengthValidator(3),
-        MaxLengthValidator(3)
-    ])
+    credit_card_number = CharField(max_length=19, blank=True, null=True)
+    credit_card_expire_date = CharField(max_length=7, blank=True, null=True)
+    credit_card_cvv = CharField(max_length=3, blank=True, null=True)
 
     def __str__(self):
         return self.username
