@@ -202,6 +202,7 @@ class CustomEditPaymentForm(UserChangeForm):
 
 
 class AddCourseForm(ModelForm):
+    error_css_class = 'error'
     course_name = CharField(
         label="Course name",
         max_length=100,

@@ -98,3 +98,7 @@ hr.hr-styling {
     height: 5px;
     background: #428bca;
 }
+
+.error {
+    color: red;
+}
